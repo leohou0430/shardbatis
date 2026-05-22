@@ -42,7 +42,7 @@
     </distributionManagement>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jdbc.test.driver>org.h2.Driver</jdbc.test.driver>
@@ -78,9 +78,9 @@
             <version>3.5.6</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.jsqlparser</groupId>
+            <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
-            <version>0.7.0</version>
+            <version>5.3</version>
         </dependency>
     </dependencies>
     <build>
@@ -166,7 +166,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
-                    <argLine>-Xms1024m -Xmx1024m -XX:MaxPermSize=256m -ea -Dfile.encoding=UTF-8</argLine>
+                    <argLine>-Xms1024m -Xmx1024m -ea -Dfile.encoding=UTF-8</argLine>
                 </configuration>
             </plugin>
             <!-- sql插件 -->
