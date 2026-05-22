@@ -2,16 +2,16 @@ package com.rookiefly.open.shardbatis.converter;
 
 import com.rookiefly.open.shardbatis.ShardException;
 import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.parser.CCJSqlParserManager;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
-import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.SetOperationList;
 import net.sf.jsqlparser.statement.update.Update;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,16 +34,15 @@ public class SqlConverterFactory {
     }
 
     private Map<String, SqlConverter> converterMap;
-    private CCJSqlParserManager pm;
 
     private SqlConverterFactory() {
         converterMap = new HashMap<String, SqlConverter>();
-        pm = new CCJSqlParserManager();
         register();
     }
 
     private void register() {
-        converterMap.put(Select.class.getName(), new SelectSqlConverter());
+        converterMap.put(PlainSelect.class.getName(), new SelectSqlConverter());
+        converterMap.put(SetOperationList.class.getName(), new SelectSqlConverter());
         converterMap.put(Insert.class.getName(), new InsertSqlConverter());
         converterMap.put(Update.class.getName(), new UpdateSqlConverter());
         converterMap.put(Delete.class.getName(), new DeleteSqlConverter());
@@ -62,7 +61,7 @@ public class SqlConverterFactory {
             throws ShardException {
         Statement statement = null;
         try {
-            statement = pm.parse(new StringReader(sql));
+            statement = CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
             log.error(e.getMessage(), e);
             throw new ShardException(e);
